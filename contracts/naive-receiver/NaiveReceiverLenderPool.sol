@@ -7,6 +7,8 @@ import "@openzeppelin/contracts/interfaces/IERC3156FlashBorrower.sol";
 import "solady/src/utils/SafeTransferLib.sol";
 import "./FlashLoanReceiver.sol";
 
+import "hardhat/console.sol";
+
 /**
  * @title NaiveReceiverLenderPool
  * @author Damn Vulnerable DeFi (https://damnvulnerabledefi.xyz)
@@ -66,3 +68,12 @@ contract NaiveReceiverLenderPool is ReentrancyGuard, IERC3156FlashLender {
     // Allow deposits of ETH
     receive() external payable {}
 }
+
+/*
+    - goal is to drain all funds from a user's address
+
+    - can I just flash loan to that user's address 10 times and have them pay the fee of 1 ether each time
+    - just make them borrow 0 to make it simple
+    - the pitfall is that the pool shouldn't let you flash loan to addresses other than yourself
+*/
+
